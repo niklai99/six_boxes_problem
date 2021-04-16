@@ -7,16 +7,19 @@
 ################################    USAGE     ##################################
 #                                                                              #
 #                   python sixBoxes.py nSamplings nWhites                      #
+#                        python sixBoxes.py nSamplings                         #
 #                                                                              #
 #                nSamplings = number of samplings to perform                   #
 #                nWhites = number of whites in the chosen box                  #
+#                 NOTE: if nWhites is not provided as argument                 #
+#                       then the box is chosen randomly                        #
 #                                                                              #
 ################################################################################
 
 
-import sys
+from sys import argv, exit
 import numpy as np
-from numpy.random import binomial
+from numpy.random import binomial, randint
 import matplotlib.pyplot as plt
 import seaborn as sns
 
@@ -205,11 +208,38 @@ class Sample(Box):
 
 def main(argv):
 
-    # number of iterations
-    n = int(argv[0])
-    # chosen box
-    B = int(argv[1])
+    
+    if len(argv) > 2:
+        print('Too many arguments!')
+        exit(1)
+    else:
 
+        try:
+            # number of iterations
+            n = int(argv[0])
+        except IndexError:
+            print('Missing "number of iterations" argument')
+            exit(1)
+        except ValueError:
+            print('Argument "number of iterations" must be integer')
+            exit(1)
+
+        try:
+            # chosen box
+            B = int(argv[1]) 
+        except ValueError:
+            print('Argument "sampling box" must be integer between 0 and 5')
+            exit(1)
+        except IndexError:
+            print('No "sampling box" argument provided: a random box will be chosen')
+            # sample random box
+            B = randint(0,6)
+        else:
+            if B not in range(6):
+                print('Argument "sampling box" must be integer between 0 and 5')
+                exit(1)
+            
+ 
     # sample n times from box B 
     sample = Sample(B, n)
     
@@ -223,8 +253,9 @@ def main(argv):
     sample.plotWhite()
 
     plt.show()
+
     return
 
 
 if __name__ == "__main__":
-   main(sys.argv[1:])
+   main(argv[1:])
