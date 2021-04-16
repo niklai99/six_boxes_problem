@@ -1,18 +1,12 @@
 ################################################################################
 #                                                                              #
-#                       Written by NikLai, 15/04/2021                          #
+#                       Written by NikLai, 16/04/2021                          #
 #                                                                              #
 ################################################################################
 
 ################################    USAGE     ##################################
 #                                                                              #
-#                   python sixBoxes.py nSamplings nWhites                      #
-#                        python sixBoxes.py nSamplings                         #
-#                                                                              #
-#                nSamplings = number of samplings to perform                   #
-#                nWhites = number of whites in the chosen box                  #
-#                 NOTE: if nWhites is not provided as argument                 #
-#                       then the box is chosen randomly                        #
+#                             python playGame.py                               #                      
 #                                                                              #
 ################################################################################
 
@@ -22,7 +16,6 @@ import numpy as np
 from numpy.random import binomial, randint
 import matplotlib.pyplot as plt
 import seaborn as sns
-
 
 # Box class
 class Box:
@@ -200,59 +193,76 @@ class Sample(Box):
         ax.legend(np.flip(handles), ['White', 'Black'], loc='best')
 
         fig.tight_layout()
-        
 
 
-def main(argv):
+def main():
 
+    print('\n#######################################################\n')
+    print('\t Welcome to the Six Boxes Game')
+    print('\n#######################################################\n')
+
+    print('\n####################   RULES   ########################\n')
+
+    print('You will be asked to choose how many times you want to sample from a randomly chosen box.')
+    print('The higher the number of extractions, the higher the chances you are going to win!')
+    print('The maximum number of samples you are allowed to perform is 10 haha')
+    print('A number between 4 and 8 is preferred to make the game interesting')
     
-    if len(argv) > 2:
-        print('Too many arguments!')
+    try:
+        n = int(input('\nHow many times do you want to sample from the box?\t'))
+    except ValueError:
+        print('Must be integer!!!! Try Again!')
         exit(1)
     else:
-
-        try:
-            # number of iterations
-            n = int(argv[0])
-        except IndexError:
-            print('Missing "number of iterations" argument')
+        if n > 10:
+            print('NOT ALLOWED! Read the rules carefully!')
             exit(1)
-        except ValueError:
-            print('Argument "number of iterations" must be integer')
-            exit(1)
-
-        try:
-            # chosen box
-            B = int(argv[1]) 
-        except ValueError:
-            print('Argument "sampling box" must be integer between 0 and 5')
-            exit(1)
-        except IndexError:
-            print('No "sampling box" argument provided: a random box will be chosen')
-            # sample random box
-            B = randint(0,6)
-        else:
-            if B not in range(6):
-                print('Argument "sampling box" must be integer between 0 and 5')
-                exit(1)
             
- 
+    # sample random box
+    B = randint(0,6)
+
     # sample n times from box B 
     sample = Sample(B, n)
     
     # compute probabilities for each of the six boxes
     sample.computeProb()
 
+    print('\nNow you have a few seconds (JUST A FEW SECONDS!) to watch the probability for each box evaluated over all the extractions:')
+
+    print('\nAfter you have seen the figures, you will be asked to make a bet on the box you think has been chosen!')
+    print('\nBut WAIT A MINUTE! What is your bet? \n(examples: "the soul", "1 billion dollars", "the house", "1 thousand spritzes", ...)\n')
+
+    bet = input('')
+
+    print('\n\nAre you READY??')
+    input('Press enter to start the game:\n')
+
+    plt.ion()
+
     # plot probabilities 
     sample.plotProb()
 
-    # plot white sample probabilities
-    sample.plotWhite()
+    plt.draw()
+    plt.pause(5)
+    plt.close()
 
-    plt.show()
+    print('\n##################   MAKE YOUR BET   ######################\n')
+
+    choice = int(input('\nWHICH BOX HAS BEEN USED TO SAMPLE???? (integers from 0 to 5)\t'))
+
+    if choice == B:
+        print('\n\nYOU WIN nothing of course lol haha joke on you')
+    else:
+        print('\n\nYOU LOSE! Haha you owe me', bet)
+        print('\nThe Box was number ' + format(B,'1.0f'))
+
+    
+    print('\n#######################################################\n')
+    print('\t Thanks for playing with me')
+    print('\n#######################################################\n')
 
     return
 
 
 if __name__ == "__main__":
-   main(argv[1:])
+   main()
