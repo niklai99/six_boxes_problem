@@ -43,7 +43,7 @@ class Sample(Box):
         # number of sampling iterations
         self.iterations = n
         # sampling probabilities for each box
-        self.prob = np.array([w/5 for w in range(0,5+1)])
+        self.prob = np.array([w/5 for w in range(5+1)])
         # inferring probability of the boxes
         self.P = np.empty((n+1, 6))
         # outcomes from the sampling loop
@@ -90,8 +90,8 @@ class Sample(Box):
         # number of sampling iterations + the probability before the first extraction
         n = self.iterations + 1
 
-        # generate the x-axis grid 
-        grid = range(0, n)
+        # generate the x-axis grid
+        grid = range(n)
 
         # figure and axes
         fig, ax = plt.subplots(nrows=2, ncols=3, figsize=(14,7), sharex=True, sharey = True, squeeze=False)
@@ -109,7 +109,7 @@ class Sample(Box):
         ax[1][2].set_xlabel('# extraction', fontsize = 18)
         ax[0][0].set_ylabel('probability', fontsize = 18)
         ax[1][0].set_ylabel('probability', fontsize = 18)
-        
+
 
         # dictionary to map outcomes as color:
         # if the result of the extraction is 0 (black stone) then the point will be plotted as orange
@@ -120,17 +120,17 @@ class Sample(Box):
         h = 0
         for j in range(2):
             for k in range(3):
-                
+
                 # set horizontal grid lines
                 ax[j][k].set_axisbelow(True)
                 ax[j][k].yaxis.grid(color='black', linestyle='dashed', alpha = 0.2)
-                
+
                 # plot the probability before any extraction as a black point
                 ax[j][k].scatter(grid[0], self.P[0, j+k+h], marker = '.', color='black', s = 80)
 
                 # plot the probability after each extraction 
                 sns.scatterplot(x=grid[1:], y=self.P[1:, j+k+h], hue=self.outcome, palette=colors, s = 40, ax = ax[j][k])
-                
+
                 # set axes title
                 ax[j][k].set_title('Box ' + format(j+k+h, '1.0f'), fontsize = 20)
 
@@ -153,8 +153,8 @@ class Sample(Box):
         # number of sampling iterations + the probability before the first extraction
         n = self.iterations + 1
 
-        # generate the x-axis grid 
-        grid = range(0, n)
+        # generate the x-axis grid
+        grid = range(n)
 
         # figure and axes
         fig, ax = plt.subplots(figsize=(5.5,3.5))
@@ -170,13 +170,13 @@ class Sample(Box):
         # set horizontal grid lines
         ax.set_axisbelow(True)
         ax.yaxis.grid(color='black', linestyle='dashed', alpha = 0.2)
-        
+
         # set axes ticks    
         ax.tick_params(axis = 'both', which = 'major', labelsize = 16, direction = 'out', length = 5)
 
         # set axes title
         ax.set_title('White Sampling Probability', fontsize = 20)
-        
+
         # dictionary to map outcomes as color:
         # if the result of the extraction is 0 (black stone) then the point will be plotted as orange
         # if the result of the extraction is 1 (white stone) then the point will be plotted as blue
