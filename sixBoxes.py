@@ -23,6 +23,7 @@ from numpy.random import binomial, randint
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+np.random.seed(89540)
 
 # Box class
 class Box:
@@ -81,6 +82,7 @@ class Sample(Box):
             
             # probability of extracting white next sample
             self.wProb[i] = np.sum(self.prob * self.P[i])
+            
 
 
 
@@ -242,6 +244,7 @@ def main(argv):
     
     # compute probabilities for each of the six boxes
     sample.computeProb()
+
 
     # plot probabilities 
     sample.plotProb()
